@@ -26,32 +26,21 @@ export default {
     }
   },
   created () {
-    this.fuzzySearch
+    this.fuzzySearch()
   },
   methods: {
     fuzzySearch () {
-      this.movies = [];
+      this.movies = []
       var search = this.$route.params.search
       if (search) {
-        this.$http.get("static/films.json")
+        this.$http.get(`film/fuzzySearch/${search}`)
           .then(response => {
             response.data.forEach(ele => {
-              if (ele.title.indexOf(search) !== -1) {
-                this.movies.push(this.$functions.getMovie(ele));
-              }
-              // 查找电影别名
-              ele.aka.filter((value) => {
-                if (value.includes(search)) {
-                  this.movies.push(this.$functions.getMovie(ele));
-                }
-              });
-              // 查找导演
-              ele.directors.filter((value) => {
-                if (value.name.includes(search)) {
-                  this.movies.push(this.$functions.getMovie(ele));
-                }
-              });
-            });
+              let half = ele.rating.average / 2
+              ele.rating.halfAverage = Number(half.toFixed(1))
+              ele.poster = 'https://images.weserv.nl/?url=' + ele.poster.substring(7)
+              this.movies.push(ele)
+            })
 
           })
           .catch(error => {

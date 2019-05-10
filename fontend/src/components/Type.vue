@@ -2,7 +2,7 @@
   <div>
     <topSearch></topSearch>
     <div id="article">
-      <movies :_movies="movies" :_subhead="subhead" ></movies>
+      <movies :_movies="movies" :_subhead="subhead"></movies>
       <genres></genres>
     </div>
   </div>
@@ -31,27 +31,27 @@ export default {
   },
   methods: {
     searchGenre () {
-      var type = this.$route.params.genre;
-      this.movies = [];
-      this.subhead = '';
-      this.$http.get("static/films.json")
+      var id = this.$route.params.id
+      var type = this.$route.params.type
+      this.movies = []
+      this.subhead = ''
+      this.$http.get(`film/genre/${id}`)
         .then(response => {
           response.data.forEach(ele => {
-            ele.genres.forEach(gen => {
-              if (type === gen) {
-                this.movies.push(this.$functions.getMovie(ele));
-              }
-            })
-            if (type.indexOf("电影") === -1 && type.indexOf("片") === -1) {
-              this.subhead = type + "电影";
-            }
-            else {
-              this.subhead = type;
-            }
+            let half = ele.rating.average / 2
+            ele.rating.halfAverage = Number(half.toFixed(1))
+            ele.poster = 'https://images.weserv.nl/?url=' + ele.poster.substring(7)
+            this.movies.push(ele)
           })
+          if (type.indexOf("电影") === -1 && type.indexOf("片") === -1) {
+            this.subhead = type + "电影";
+          }
+          else {
+            this.subhead = type;
+          }
         })
         .catch(err => {
-          console.log(err);
+          console.log(err)
         })
     }
   },

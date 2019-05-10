@@ -16,12 +16,12 @@ export default new Router({
       name: 'Movie',
       component: Movie,
     }, {
-      path: '/type/:genre',
+      path: '/type/:id/:type',
       name: 'Type',
       component: Type,
     },
     {
-      path: '/:search',
+      path: '/search/:search',
       name: 'Search',
       component: Search,
     }

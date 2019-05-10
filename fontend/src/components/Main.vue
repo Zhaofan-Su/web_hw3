@@ -31,10 +31,13 @@ export default {
   methods: {
     initial () {
       this.subhead = "";
-      this.$http.get("static/films.json")
+      this.$http.get(`film/all`)
         .then(response => {
-          response.data.forEach(element => {
-            this.movies.push(this.$functions.getMovie(element))
+          response.data.forEach(ele => {
+            let half = parseFloat(ele.rating.average) / 2
+            ele.rating.halfAverage = Number(half.toFixed(1))
+            ele.poster = 'https://images.weserv.nl/?url=' + ele.poster.substring(7)
+            this.movies.push(ele)
           })
         })
         .catch(error => {

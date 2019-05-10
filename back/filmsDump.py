@@ -87,7 +87,7 @@ def data_dump(datas):
         for aka in data['aka']:
             akas += aka + ","
 
-        film = Film.objects.create(
+        film, _ = Film.objects.get_or_create(
             _id=data['_id'],
             season_count=data['season_count'],
             pubdate=data['pubdate'],
@@ -146,7 +146,7 @@ def data_dump(datas):
 if __name__ == "__main__":
     films = get_data()
     # data_dump(films)
-    data_dump(films[2000:2500])
+    data_dump(films[10000:])
     # data_dump(films[10000:])
     # clear()
     # print(type(films[0]['rating']['stars'][4]))

@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     fuzzySearch () {
-      this.$router.push(`/${this.search}`)
+      this.$router.push(`/search/${this.search}`)
     },
     initial () {
       this.$router.push(`/`)

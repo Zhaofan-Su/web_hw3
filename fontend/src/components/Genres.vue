@@ -4,8 +4,12 @@
       <h2 type="text" class="head_type">电影分类</h2>
       <p class="breakline"></p>
       <div class="types">
-        <span v-for="genre in genres" :key="genre" class="type">
-          <el-button type="text" v-on:click="searchGenre($event)">{{genre}}</el-button>
+        <span v-for="(genre,index) in genres" :key="index" class="type">
+          <el-button
+            v-if="genre.name.length > 0"
+            type="text"
+            v-on:click="searchGenre(genre.id, genre.name)"
+          >{{genre.name}}</el-button>
         </span>
       </div>
     </div>
@@ -27,13 +31,9 @@ export default {
   },
   methods: {
     getGenres () {
-      this.$http.get("static/films.json")
+      this.$http.get(`film/genres`)
         .then(response => {
-          response.data.forEach(element => {
-            for (var i = 0; i < element.genres.length; i++) {
-              this.genres.indexOf(element.genres[i]) === -1 ? this.genres.push(element.genres[i]) : 0;
-            }
-          })
+          this.genres = response.data
           var compare = function (x, y) {
             if (x < y) {
               return -1;
@@ -51,8 +51,8 @@ export default {
           console.log(error);
         });
     },
-    searchGenre (event) {
-      this.$router.push(`/type/${event.target.innerText}`)
+    searchGenre (id, name) {
+      this.$router.push(`/type/${id}/${name}`)
     },
   }
 }

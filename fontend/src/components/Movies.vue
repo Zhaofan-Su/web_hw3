@@ -14,7 +14,7 @@
               <tbody>
                 <tr class="movie">
                   <td class="image">
-                    <a @click="goDetail(movie.id)">
+                    <a @click="goDetail(movie._id)">
                       <img :src="movie.poster" alt="加载图片出错" :onerror="defaultSrc">
                     </a>
                   </td>
@@ -22,22 +22,37 @@
                     <div class="intro">
                       <a @click="goDetail(movie.id)" class="title">{{movie.title}}</a>
                       <div class="clearfix">
-                        <div class="directors">导演：{{movie.directors}}</div>
+                        <div class="directors">
+                          导演：
+                          <span
+                            v-for="(director, index) in movie.directors"
+                            :key="index"
+                          >{{director.name}}</span>
+                        </div>
                         <div class="genres">
-                          <span v-for="(genre, i) in movie.genres" :key="i" class="genre">{{genre}}</span>
+                          <span
+                            v-for="(genre, index) in movie.genres"
+                            :key="index"
+                            class="genre"
+                          >{{genre.name}}</span>
                         </div>
                       </div>
 
-                      <p>{{movie.casts}}</p>
+                      <p>
+                        <span v-for="(cast,index) in movie.casts" :key="index">
+                          <span v-if="index != movie.casts.length-1">{{cast.name}}&nbsp;/&nbsp;</span>
+                          <span v-else>{{cast.name}}...</span>
+                        </span>
+                      </p>
                       <div class="clearfix star">
                         <el-rate
-                          v-model="movie.halfAverage"
+                          v-model="movie.rating.halfAverage"
                           disabled
                           text-color="#ff9900"
                           score-template="{value}"
                           class="score"
                         ></el-rate>
-                        <span class="score">&nbsp;{{movie.score}}&nbsp;</span>
+                        <span class="score">&nbsp;{{movie.rating.average}}&nbsp;</span>
                         <span class="rate_people">&nbsp;&nbsp;[{{movie.rating.rating_people}}人评价]</span>
                       </div>
                     </div>

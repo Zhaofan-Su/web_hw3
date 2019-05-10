@@ -13,9 +13,11 @@ Vue.use(functions)
 Vue.config.productionTip = false
 
 Vue.prototype.$http = axios
-//Vue.prototype.HOST = '/api'
-//axios.defaults.baseURL = 'http://127.0.0.1:8081'
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-fromurlencodeed'
+Vue.prototype.HOST = '/api'
+axios.defaults.baseURL = 'http://127.0.0.1:8000'
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-fromurlencodeed;charset=UTF-8'
+
+
 
 /* eslint-disable no-new */
 new Vue({

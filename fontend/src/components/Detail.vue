@@ -23,7 +23,7 @@
             <p>
               类型：
               <span class="genre" v-for="(genre,index) in movie.genres" :key="index">
-                <el-button type="text" v-on:click="searchGenre($event)">{{genre}}</el-button>
+                <el-button type="text" v-on:click="searchGenre($event)">{{genre.name}}</el-button>
                 <span v-if="movie.genres.length!=1&&index!=movie.genres.length-1">&nbsp;/&nbsp;</span>
               </span>
             </p>
@@ -86,12 +86,12 @@
                 </div>
               </div>
               <div class="item" v-if="movie.rating">
-                <div v-for="(star, index) in movie.rating.stars" :key="index">
+                <div v-for="(star, index) in stars" :key="index">
                   {{5-index}}星：
                   <el-progress
                     :text-inside="true"
                     :stroke-width="12"
-                    :percentage="parseFloat(movie.rating.stars[index])"
+                    :percentage="parseFloat(stars[index])"
                     class="progress"
                   ></el-progress>
                 </div>
@@ -119,6 +119,7 @@ export default {
     return {
       movie: {},
       imgSrc: '',
+      stars: [],
       defaultSrc: 'this.src="' + require('../assets/default.jpg') + '"'
     }
   },
@@ -127,16 +128,20 @@ export default {
   },
   methods: {
     search () {
-      this.$http.get("static/films.json")
+      this.$http.get(`film/detail/${this.$route.params.id}`)
         .then(response => {
-          response.data.forEach(ele => {
-            if (ele._id == this.$route.params.id) {
-              this.movie = ele;
-              this.imgSrc = 'https://images.weserv.nl/?url=' + ele.poster.substring(7);
-              var half = this.movie.rating.average / 2
-              this.movie.rating.halfAverage = Number(half.toFixed(1))
-            }
-          })
+          this.movie = response.data
+          this.imgSrc = 'https://images.weserv.nl/?url=' + response.data.poster.substring(7)
+          let half = response.data.rating.average / 2
+          this.movie.rating.halfAverage = Number(half.toFixed(1))
+          this.movie.languages = response.data.languages.split(',')
+          this.movie.aka = response.data.aka.split(',')
+          this.movie.countries = response.data.countries.split(',')
+          this.stars.push(response.data.rating.five)
+          this.stars.push(response.data.rating.four)
+          this.stars.push(response.data.rating.three)
+          this.stars.push(response.data.rating.two)
+          this.stars.push(response.data.rating.one)
         })
         .catch(err => {
           console.log(err)
