@@ -81,7 +81,7 @@ def search_films(request, opt, pageNo):
 
     start = (pageNo - 1) * pageSize
     end = len(films) if (start + pageSize >= len(films)) else start + pageSize
-    serializer = FilmSerializer(films[start:end].reverse(), many=True)
+    serializer = FilmSerializer(films[::-1][start:end], many=True)
     context = {
         'total': len(films),
         'films': serializer.data,
