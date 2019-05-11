@@ -2,7 +2,21 @@
   <div>
     <topSearch></topSearch>
     <div id="article">
-      <movies :_movies="movies" :_subhead="subhead"></movies>
+      <div class="left" v-loading.fullscreen,lock="loading">
+        <movies :_movies="movies" :_subhead="subhead"></movies>
+        <!-- 分页器 -->
+        <el-pagination
+          :page-size="pageSize"
+          :current-page="pageNo"
+          :page-count="pageCount"
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          class="pagination"
+        ></el-pagination>
+      </div>
+
       <genres></genres>
     </div>
   </div>
@@ -23,28 +37,54 @@ export default {
     return {
       subhead: '',
       movies: [],
+      loading: false,
+      total: 0,
+      pageNo: 1,
+      pageSize: 20,
+      pageCount: 0,
     }
   },
   created () {
     this.initial();
+    this.handleCurrentChange(this.pageNo)
   },
   methods: {
     initial () {
-      this.subhead = "";
-      this.$http.get(`film/all`)
+      this.subhead = ''
+    },
+    handleSizeChange (val) {
+      this.pageSize = val;
+      this.handleCurrentChange(this.pageNo);
+    },
+    handleCurrentChange (val) {
+      this.pageNo = val;
+      this.getData(val)
+    },
+    getData (pageNo) {
+      this.movies = []
+      this.total = 0
+      this.loading = true
+      this.$http.get(`film/main/${pageNo}`)
         .then(response => {
-          response.data.forEach(ele => {
+          this.total = response.data.total
+          this.pageCount = Math.ceil(this.total / this.pageSize)
+          response.data.films.forEach(ele => {
             let half = parseFloat(ele.rating.average) / 2
             ele.rating.halfAverage = Number(half.toFixed(1))
             ele.poster = 'https://images.weserv.nl/?url=' + ele.poster.substring(7)
             this.movies.push(ele)
           })
+          this.loading = false
         })
         .catch(error => {
-          console.log(error);
-        });
-      this.subhead = ''
+          console.log(error)
+        })
     },
+  },
+  watch: {
+    '$route' (to, from) {
+      this.getData(this.pageNo)
+    }
   }
 }
 </script>
@@ -100,12 +140,10 @@ export default {
   margin: 0 2%;
 }
 
-/* 以下为右侧样式设置 */
-
 .pagination {
   text-align: center;
-  margin-top: 2%;
-  margin-bottom: 5%;
+  padding-top: 5%;
+  padding-bottom: 8%;
   clear: both;
 }
 </style>

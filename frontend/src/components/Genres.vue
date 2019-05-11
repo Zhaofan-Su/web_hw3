@@ -4,10 +4,11 @@
       <h2 type="text" class="head_type">电影分类</h2>
       <p class="breakline"></p>
       <div class="types">
-        <span v-for="(genre,index) in genres" :key="index" class="type">
+        <span v-for="(genre,index) in genres" :key="index">
           <el-button
-            v-if="genre.name.length > 0"
+            v-if="genre.name!=''"
             type="text"
+            class="type"
             v-on:click="searchGenre(genre.id, genre.name)"
           >{{genre.name}}</el-button>
         </span>
@@ -35,21 +36,21 @@ export default {
         .then(response => {
           this.genres = response.data
           var compare = function (x, y) {
-            if (x < y) {
-              return -1;
+            if (x.name.length < y.name.length) {
+              return -1
             }
-            else if (x > y) {
-              return 1;
+            else if (x.name.length > y.name.length) {
+              return 1
             }
             else {
-              return 0;
+              return 0
             }
-          };
-          this.genres.sort(compare);
+          }
+          this.genres.sort(compare)
         })
         .catch(error => {
           console.log(error);
-        });
+        })
     },
     searchGenre (id, name) {
       this.$router.push(`/type/${id}/${name}`)
@@ -75,7 +76,8 @@ export default {
 }
 .type {
   display: inline-block;
-  min-width: 55px;
+  min-width: 70px;
+  text-align: left;
 }
 </style>
 

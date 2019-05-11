@@ -1,6 +1,8 @@
 <template>
   <div id="search">
-    <el-button type="text" id="head" v-on:click="initial">电影乐园</el-button>
+    <el-tooltip content="点击返回主页" placement="left" effect="light">
+      <el-button type="text" id="head" v-on:click="initial">电影乐园</el-button>
+    </el-tooltip>
     <el-input placeholder="请输入电影名、导演" v-model="search">
       <el-button slot="append" icon="el-icon-search" v-on:click="fuzzySearch"></el-button>
     </el-input>

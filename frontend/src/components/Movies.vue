@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="left" id="movies">
+    <div id="movies">
       <div style="margin:0">
         <el-button type="text" v-on:click="initial" class="head">全部影片&nbsp;</el-button>
         <span v-if="subhead.length!=0" class="el-icon-d-arrow-right subhead">&nbsp;{{subhead}}</span>
       </div>
 
-      <div id="contents" v-if="currentMovies.length!=0">
+      <div id="contents" v-if="movies.length!=0">
         <ul>
-          <li v-for="movie in currentMovies" :key="movie.title">
+          <li v-for="movie in movies" :key="movie.title">
             <p class="breakline"></p>
             <table>
               <tbody>
@@ -27,7 +27,7 @@
                           <span
                             v-for="(director, index) in movie.directors"
                             :key="index"
-                          >{{director.name}}</span>
+                          >{{director.name}}&nbsp;&nbsp;</span>
                         </div>
                         <div class="genres">
                           <span
@@ -39,6 +39,7 @@
                       </div>
 
                       <p>
+                        演员：
                         <span v-for="(cast,index) in movie.casts" :key="index">
                           <span v-if="index != movie.casts.length-1">{{cast.name}}&nbsp;/&nbsp;</span>
                           <span v-else>{{cast.name}}...</span>
@@ -64,17 +65,6 @@
         </ul>
       </div>
       <div id="no-contents" v-else>没有你查找的影片呢，再试试其他的吧。</div>
-      <!-- 分页器 -->
-      <el-pagination
-        :page-size="pageSize"
-        :current-page="pageNo"
-        :page-count="pageCount"
-        layout="prev, pager, next"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        class="pagination"
-      ></el-pagination>
     </div>
   </div>
 </template>
@@ -97,27 +87,19 @@ export default {
     return {
       movies: [],
       subhead: this._subhead,
-      currentMovies: [],
-      total: 0,
-      pageNo: 1,
-      pageSize: 20,
-      pageCount: 11,
       defaultSrc: 'this.src="' + require('../assets/default.jpg') + '"',
     }
   },
   watch: {
     _movies (val) {
       this.movies = val
-      this.total = this.movies.length
       this.subhead = this._subhead
-      this.handleCurrentChange(this.pageNo)
     }
   },
   mounted () {
     this.movies = this._movies
     this.total = this.movies.length;
     this.subhead = this._subhead;
-    this.handleCurrentChange(this.pageNo)
   },
   methods: {
     goDetail (id) {
@@ -132,24 +114,7 @@ export default {
       this.getData(val)
     },
     initial () {
-      // this.pageNo = 1;
-      // this.subhead = "";
-      // this.search = "";
-      // this.$http.get("static/films.json")
-      //   .then(response => {
-      //     this.total = response.data.length;
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
-      // this.getData(this.pageNo);
       this.$router.push(`/`);
-    },
-    getData (pageNo) {
-      this.currentMovies = []
-      var from = (pageNo - 1) * this.pageSize;
-      var to = (from + this.pageSize >= this.movies.length) ? this.movies.length : from + this.pageSize;
-      this.currentMovies = this.movies.slice(from, to)
     },
   }
 }
@@ -217,6 +182,7 @@ td {
   vertical-align: bottom;
   margin-top: 5px;
 }
+
 .genre {
   display: inline-block;
   margin-left: 8px;
@@ -243,12 +209,6 @@ td {
   color: rgb(255, 153, 0);
 }
 
-.pagination {
-  text-align: center;
-  margin-top: 2%;
-  margin-bottom: 5%;
-  clear: both;
-}
 li {
   list-style: none;
   padding: 0;
