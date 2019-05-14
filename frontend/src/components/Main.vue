@@ -6,8 +6,8 @@
         <movies :_movies="movies" :_subhead="subhead"></movies>
         <!-- 分页器 -->
         <el-pagination
-          :page-size="pageSize"
           :current-page="pageNo"
+          :page-size="pageSize"
           :page-count="pageCount"
           layout="total, prev, pager, next, jumper"
           :total="total"
@@ -45,13 +45,10 @@ export default {
     }
   },
   created () {
-    this.initial();
-    this.handleCurrentChange(this.pageNo)
+    this.subhead = ''
+    this.getData(this.pageNo)
   },
   methods: {
-    initial () {
-      this.subhead = ''
-    },
     handleSizeChange (val) {
       this.pageSize = val;
       this.handleCurrentChange(this.pageNo);
@@ -62,7 +59,6 @@ export default {
     },
     getData (pageNo) {
       this.movies = []
-      this.total = 0
       this.loading = true
       this.$http.get(`film/main/${pageNo}`)
         .then(response => {
@@ -79,13 +75,10 @@ export default {
         .catch(error => {
           console.log(error)
         })
+      console.log("after getdata", this.pageNo)
     },
-  },
-  watch: {
-    '$route' (to, from) {
-      this.getData(this.pageNo)
-    }
   }
+
 }
 </script>
 

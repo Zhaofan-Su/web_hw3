@@ -68,7 +68,4 @@ a:hover {
   color: gray;
   cursor: pointer;
 }
-.el-progress-bar__innerText {
-  color: #333;
-}
 </style>

@@ -267,6 +267,9 @@ img {
   text-indent: 2em;
   color: #22202e;
 }
+.progress >>> .el-progress-bar__innerText {
+  color: #333;
+}
 </style>
 
 

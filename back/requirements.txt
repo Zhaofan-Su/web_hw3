@@ -1,0 +1,8 @@
+Django==2.2.1
+django-cors-headers==2.5.3
+djangorestframework==3.9.3
+mod-wsgi==4.6.5+ap24vc14
+mysqlclient==1.4.2.post1
+PyMySQL==0.9.3
+pytz==2019.1
+sqlparse==0.3.0

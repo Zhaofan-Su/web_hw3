@@ -3,3 +3,4 @@ films_all.json
 node_modules
 __pycache__
 dist
+static

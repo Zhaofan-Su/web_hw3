@@ -146,7 +146,7 @@ def data_dump(datas):
 if __name__ == "__main__":
     films = get_data()
     # data_dump(films)
-    data_dump(films[10000:])
+    # data_dump(films[10000:])
     # data_dump(films[10000:])
     # clear()
     # print(type(films[0]['rating']['stars'][4]))
